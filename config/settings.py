@@ -83,9 +83,9 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "ms6.guzel.net.tr"
+EMAIL_HOST = "sunucu.mail"
 EMAIL_HOST_USER = "info@seven.tours"
-EMAIL_HOST_PASSWORD = "Aliya3907!"
+EMAIL_HOST_PASSWORD = "password"
 DEFAULT_FROM_EMAIL = "info@seven.tours"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
