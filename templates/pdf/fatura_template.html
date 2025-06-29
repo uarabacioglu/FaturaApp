@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            @font-face {
+                font-family: "DejaVuSansMono";
+                src: url("{{ STATIC_ROOT }}/fonts/DejaVuSansMono.ttf");
+            }
+            body {
+                font-family: "DejaVuSansMono", sans-serif;
+                font-size: 12px;
+                color: #000;
+            }
+            .header,
+            .footer {
+                width: 100%;
+                text-align: center;
+            }
+            .logo {
+                width: 150px;
+            }
+            .content {
+                width: 100%;
+                margin-top: 20px;
+            }
+            .section {
+                margin-bottom: 15px;
+            }
+            .left {
+                float: left;
+                width: 48%;
+            }
+            .right {
+                float: right;
+                width: 48%;
+                text-align: right;
+            }
+            .clear {
+                clear: both;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+            th,
+            td {
+                border: 1px solid #000;
+                padding: 5px;
+                text-align: left;
+            }
+            .summary td {
+                text-align: right;
+            }
+            h2,
+            h4 {
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            {% if logo_url %}
+            <img src="{{ logo_url }}" class="logo" />
+            {% endif %}
+            <h2>Rechnung</h2>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="left">
+                    <strong>{{ fatura.bizim_firma.title }}</strong><br />
+                    {{ fatura.bizim_firma.adres|linebreaksbr }}<br />
+                    T: {{ fatura.bizim_firma.tel }}<br />
+                    E-Mail: {{ fatura.bizim_firma.email }}<br />
+                    Steuernummer: 85261004703
+                </div>
+
+                <div class="right">
+                    <strong>Kunde:</strong><br />
+                    {{ fatura.musteri.title }}<br />
+                    {{ fatura.musteri.adres|linebreaksbr }}
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="section">
+                <strong>Rechnungsnummer:</strong> {{ fatura.fatura_no }}<br />
+                <strong>Rechnungsdatum:</strong> {{ invoice_date }}
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Beschreibung</th>
+                        <th>Menge</th>
+                        <th>Einzelpreis (€)</th>
+                        <th>Gesamt (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.urun.title }}</td>
+                        <td>{{ item.adet }}</td>
+                        <td>{{ item.urun.birim_fiyat|floatformat:2 }}</td>
+                        <td>{{ item.kdvli_toplam|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <table class="summary">
+                <tr>
+                    <td><strong>Zwischensumme</strong></td>
+                    <td>{{ subtotal|floatformat:2 }} €</td>
+                </tr>
+                <tr>
+                    <td><strong>zzgl. 19% MwSt</strong></td>
+                    <td>{{ tax|floatformat:2 }} €</td>
+                </tr>
+                <tr>
+                    <td><strong>Gesamtbetrag</strong></td>
+                    <td>{{ total|floatformat:2 }} €</td>
+                </tr>
+            </table>
+
+            <div class="section">
+                <h4>Bankverbindung</h4>
+                Kontoinhaber: {{ fatura.bizim_firma.title }}<br />
+                Bankname: {{ fatura.bizim_firma.bank }}<br />
+                IBAN: {{ fatura.bizim_firma.iban }}<br />
+                BIC: {{ fatura.bizim_firma.bic_no }}
+            </div>
+        </div>
+
+        <div class="footer">
+            {{ fatura.bizim_firma.title }} – {{ fatura.bizim_firma.adres }} –
+            <strong>{{ fatura.bizim_firma.email }}</strong>
+        </div>
+    </body>
+</html>
